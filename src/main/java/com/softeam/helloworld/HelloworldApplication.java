@@ -1,12 +1,12 @@
-package com.softeam.skills;
+package com.softeam.helloworld;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class SkillApplication {
+public class HelloworldApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(SkillApplication.class, args);
+        SpringApplication.run(HelloworldApplication.class, args);
     }
 }
