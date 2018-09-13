@@ -2,7 +2,7 @@
 import java.text.*
 
 // pod utilisé pour la compilation du projet
-podTemplate(label: 'skills-api-pod', nodeSelector: 'medium', containers: [
+podTemplate(label: 'helloworld-simple-pod', nodeSelector: 'medium', containers: [
 
         // le slave jenkins
         containerTemplate(name: 'jnlp', image: 'jenkinsci/jnlp-slave:alpine'),
@@ -20,7 +20,7 @@ podTemplate(label: 'skills-api-pod', nodeSelector: 'medium', containers: [
         volumes: [hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/docker.sock')]
 ) {
 
-    node('skills-api-pod') {
+    node('helloworld-simple-pod') {
 
         def branch = env.JOB_NAME.replaceFirst('.+/', '');
 
@@ -77,7 +77,7 @@ podTemplate(label: 'skills-api-pod', nodeSelector: 'medium', containers: [
                 build job: "/SofteamOuest/chart-run/master",
                         wait: false,
                         parameters: [string(name: 'image', value: "$now"),
-                                     string(name: 'chart', value: "skills-api")]
+                                     string(name: 'chart', value: "helloworld-simple")]
             }
         }
     }

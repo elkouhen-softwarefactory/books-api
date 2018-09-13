@@ -1,6 +1,6 @@
 version: '3.2'
 services:
 
-  skills-api:
-    image: "registry.k8.wildwidewest.xyz/repository/docker-repository/skills-api:${tag}"
+  helloworld-simple:
+    image: "registry.k8.wildwidewest.xyz/repository/docker-repository/helloworld-simple:${tag}"
     build: .
