@@ -74,7 +74,7 @@ podTemplate(label: 'helloworld-simple-pod', nodeSelector: 'medium', containers: 
 
             stage('RUN') {
 
-                build job: "/SofteamOuest/chart-run/master",
+                build job: "/Helloworld-K8s/chart-run/master",
                         wait: false,
                         parameters: [string(name: 'image', value: "$now"),
                                      string(name: 'chart', value: "helloworld-simple")]
