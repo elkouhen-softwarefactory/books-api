@@ -4,7 +4,7 @@ MAINTAINER mehdi.elkouhen@softeam.fr
 
 WORKDIR /apps/helloworld-simple
 
-COPY build/libs/helloworld-simple.jar /apps/helloworld-simple/helloworld-simple.jar
+COPY build/libs/helloworld-simple-*.jar /apps/helloworld-simple/helloworld-simple.jar
 
 EXPOSE 8080
 

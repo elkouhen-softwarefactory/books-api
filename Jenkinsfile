@@ -25,6 +25,10 @@ podTemplate(label: 'helloworld-simple-pod', nodeSelector: 'medium', containers: 
         def branch = env.JOB_NAME.replaceFirst('.+/', '');
 
         properties([
+                parameters([
+                        booleanParam(defaultValue: false, description: '', name: 'DO_RELEASE'),
+                        string(defaultValue: '', description: '', name: 'RELEASE_VERSION', trim: false),
+                        string(defaultValue: '', description: '', name: 'NEXT_DEV_VERSION', trim: false)]),
                 buildDiscarder(
                         logRotator(
                                 artifactDaysToKeepStr: '1',
@@ -35,8 +39,6 @@ podTemplate(label: 'helloworld-simple-pod', nodeSelector: 'medium', containers: 
                 )
         ])
 
-        def now = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date())
-
         stage('CHECKOUT') {
             checkout scm
         }
@@ -45,7 +47,35 @@ podTemplate(label: 'helloworld-simple-pod', nodeSelector: 'medium', containers: 
 
             stage('BUILD SOURCES') {
                 withCredentials([string(credentialsId: 'sonarqube_token', variable: 'token')]) {
-                    sh 'gradle clean build -Dsonar.login=${token}'
+
+                    configFileProvider([configFile(fileId: 'gradle.properties', targetLocation: "gradle.properties"),
+                                        configFile(fileId: 'id_rsa', targetLocation: "/home/jenkins/.ssh/id_rsa"),
+                                        configFile(fileId: 'id_rsa.pub', targetLocation: "/home/jenkins/.ssh/id_rsa.pub")
+
+                    ]) {
+
+                        if (!params.DO_RELEASE) {
+
+                            sh 'gradle clean build publish -Dsonar.login=${token}'
+                        } else {
+
+                            sh 'mkdir /root/.ssh'
+
+                            sh 'cp /home/jenkins/.ssh/id_rsa /root/.ssh/id_rsa'
+                            sh 'cp /home/jenkins/.ssh/id_rsa.pub /root/.ssh/id_rsa.pub'
+
+                            sh 'echo "StrictHostKeyChecking no" > /root/.ssh/config'
+
+                            sh 'chmod 600 /root/.ssh/id_rsa'
+                            sh 'chmod 644 /root/.ssh/id_rsa.pub'
+                            sh 'chmod 644 /root/.ssh/config'
+
+                            sh 'git config --global user.email "mehdi.elkouhen@gmail.com"'
+                            sh 'git config --global user.name "Jenkins Release"'
+
+                            sh "gradle release -Prelease.useAutomaticVersion=true -Prelease.releaseVersion=${params.RELEASE_VERSION} -Prelease.newVersion=${params.NEXT_DEV_VERSION}"
+                        }
+                    }
                 }
             }
         }
@@ -64,9 +94,15 @@ podTemplate(label: 'helloworld-simple-pod', nodeSelector: 'medium', containers: 
                     sh "docker login -u ${username} -p ${password} registry.k8.wildwidewest.xyz"
                 }
 
-                sh "tag=$now docker-compose build"
+                if (!params.DO_RELEASE) {
+                    now = sh (script: 'cat version.properties | cut -d= -f2', returnStdout: true)
 
-                sh "tag=$now docker-compose push"
+                    sh 'gradle clean build publish -Dsonar.login=${token}'
+                } else {
+                    sh "tag=${params.RELEASE_VERSION} docker-compose build"
+
+                    sh "tag=${params.RELEASE_VERSION} docker-compose push"
+                }
             }
         }
 
