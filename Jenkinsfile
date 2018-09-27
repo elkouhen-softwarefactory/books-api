@@ -1,5 +1,6 @@
-#!groovy
-import java.text.*
+@Library('deploy-library') import com.softeam.deploy.DeployHelper
+
+def utils = new DeployHelper(this)
 
 // pod utilisé pour la compilation du projet
 podTemplate(label: 'helloworld-simple-pod', nodeSelector: 'medium', containers: [
@@ -59,19 +60,7 @@ podTemplate(label: 'helloworld-simple-pod', nodeSelector: 'medium', containers: 
                             sh 'gradle clean build publish -Dsonar.login=${token}'
                         } else {
 
-                            sh 'mkdir /root/.ssh'
-
-                            sh 'cp /home/jenkins/.ssh/id_rsa /root/.ssh/id_rsa'
-                            sh 'cp /home/jenkins/.ssh/id_rsa.pub /root/.ssh/id_rsa.pub'
-
-                            sh 'echo "StrictHostKeyChecking no" > /root/.ssh/config'
-
-                            sh 'chmod 600 /root/.ssh/id_rsa'
-                            sh 'chmod 644 /root/.ssh/id_rsa.pub'
-                            sh 'chmod 644 /root/.ssh/config'
-
-                            sh 'git config --global user.email "mehdi.elkouhen@gmail.com"'
-                            sh 'git config --global user.name "Jenkins Release"'
+                            utils.configureGIT()
 
                             sh "gradle release -Prelease.useAutomaticVersion=true -Prelease.releaseVersion=${params.RELEASE_VERSION} -Prelease.newVersion=${params.NEXT_DEV_VERSION}"
                         }
@@ -84,25 +73,25 @@ podTemplate(label: 'helloworld-simple-pod', nodeSelector: 'medium', containers: 
 
             stage('BUILD DOCKER IMAGE') {
 
-                sh 'mkdir /etc/docker'
-
-                // le registry est insecure (pas de https)
-                sh 'echo {"insecure-registries" : ["registry.k8.wildwidewest.xyz"]} > /etc/docker/daemon.json'
+                utils.configureDockerRegistry()
 
                 withCredentials([usernamePassword(credentialsId: 'nexus_user', usernameVariable: 'username', passwordVariable: 'password')]) {
 
                     sh "docker login -u ${username} -p ${password} registry.k8.wildwidewest.xyz"
                 }
 
+                String now = ""
+
                 if (!params.DO_RELEASE) {
-                    now = sh (script: 'cat version.properties | cut -d= -f2', returnStdout: true)
+                    now = sh (script: 'cat version.properties | cut -d= -f2', returnStdout: true).trim()
 
-                    sh 'gradle clean build publish -Dsonar.login=${token}'
                 } else {
-                    sh "tag=${params.RELEASE_VERSION} docker-compose build"
-
-                    sh "tag=${params.RELEASE_VERSION} docker-compose push"
+                    now = params.RELEASE_VERSION
                 }
+
+                sh "tag=${now} docker-compose build"
+
+                sh "tag=${now} docker-compose push"
             }
         }
 
