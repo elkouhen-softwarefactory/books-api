@@ -25,6 +25,8 @@ podTemplate(label: 'helloworld-simple-pod', nodeSelector: 'medium', containers: 
 
         def branch = env.JOB_NAME.replaceFirst('.+/', '');
 
+        String now = ""
+
         properties([
                 parameters([
                         booleanParam(defaultValue: false, description: '', name: 'DO_RELEASE'),
@@ -79,8 +81,6 @@ podTemplate(label: 'helloworld-simple-pod', nodeSelector: 'medium', containers: 
 
                     sh "docker login -u ${username} -p ${password} registry.k8.wildwidewest.xyz"
                 }
-
-                String now = ""
 
                 if (!params.DO_RELEASE) {
                     now = sh (script: 'cat version.properties | cut -d= -f2', returnStdout: true).trim()
