@@ -1,10 +1,10 @@
-group 'com.softeam'
+group "com.softeam"
 
-version = rootProject.file('version.properties').text.replace("version=", "").trim()
+version = rootProject.file("version.properties").text.replace("version=", "").trim()
 
 repositories {
     maven {
-        url 'https://nexus.k8.wildwidewest.xyz/repository/maven-public/'
+        url "https://nexus.k8.wildwidewest.xyz/repository/maven-public/"
         credentials {
             username nexusUsername
             password nexusPassword
@@ -14,11 +14,12 @@ repositories {
 
 buildscript {
 
-    ext.spring_boot_version = '2.0.5.RELEASE'
+    ext.spring_boot_version = "2.0.5.RELEASE"
 
     repositories {
+
         maven {
-            url 'https://nexus.k8.wildwidewest.xyz/repository/maven-public/'
+            url "https://nexus.k8.wildwidewest.xyz/repository/maven-public/"
             credentials {
                 username nexusUsername
                 password nexusPassword
@@ -29,25 +30,27 @@ buildscript {
             url "https://plugins.gradle.org/m2/"
         }
     }
+
     dependencies {
 
         classpath "org.springframework.boot:spring-boot-gradle-plugin:$spring_boot_version"
+        classpath "io.spring.gradle:dependency-management-plugin:0.5.6.RELEASE"
         classpath "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:2.6.2"
+        classpath "net.researchgate:gradle-release:2.6.0"
     }
 }
 
-apply plugin: 'java'
-apply plugin: 'org.springframework.boot'
-apply plugin: 'io.spring.dependency-management'
+apply plugin: "java"
+apply plugin: "org.springframework.boot"
+apply plugin: "io.spring.dependency-management"
 apply plugin: "org.sonarqube"
-
-//bootJar.archiveName="helloworld-simple.jar"
-
+apply plugin: "maven-publish"
+apply plugin: "net.researchgate.release"
 
 dependencies {
     compile "org.springframework.boot:spring-boot-starter-web"
     compile("org.springframework.boot:spring-boot-starter-actuator")
-    compile('org.springframework.boot:spring-boot-starter')
+    compile("org.springframework.boot:spring-boot-starter")
 }
 
 publishing {
@@ -59,7 +62,7 @@ publishing {
             repositories {
                 maven {
 
-                    if (project.version.endsWith('-SNAPSHOT')) {
+                    if (project.version.endsWith("-SNAPSHOT")) {
                         url "https://nexus.k8.wildwidewest.xyz/repository/maven-snapshots/"
                     } else {
                         url "https://nexus.k8.wildwidewest.xyz/repository/maven-releases/"
@@ -77,7 +80,7 @@ publishing {
 
 release {
     failOnUnversionedFiles = false
-    versionPropertyFile = 'version.properties'
+    versionPropertyFile = "version.properties"
 }
 
 afterReleaseBuild.dependsOn publish
