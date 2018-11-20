@@ -1,11 +1,19 @@
-FROM java:8
+FROM maven:3.6.0-jdk-11
 
 MAINTAINER mehdi.elkouhen@softeam.fr
 
-WORKDIR /apps/helloworld-simple
+WORKDIR /apps/helloworld
 
-COPY build/libs/helloworld-simple-*.jar /apps/helloworld-simple/helloworld-simple.jar
+COPY pom.xml ./
+
+RUN mvn dependency:go-offline -B
+
+COPY src/ src/
+
+RUN mvn package
+
+# FROM openjdk:11-jre-slim
 
 EXPOSE 8080
 
-CMD java -jar helloworld-simple.jar
+CMD java -jar target/helloworld-simple.jar

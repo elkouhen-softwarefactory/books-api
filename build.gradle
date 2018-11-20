@@ -1,16 +1,7 @@
-group "com.softeam"
+group "fr.opus.helloworld"
 
 version = rootProject.file("version.properties").text.replace("version=", "").trim()
-
-repositories {
-    maven {
-        url "https://nexus.k8.wildwidewest.xyz/repository/maven-public/"
-        credentials {
-            username nexusUsername
-            password nexusPassword
-        }
-    }
-}
+offlineRepositoryRoot = 'offline'
 
 buildscript {
 
@@ -19,11 +10,7 @@ buildscript {
     repositories {
 
         maven {
-            url "https://nexus.k8.wildwidewest.xyz/repository/maven-public/"
-            credentials {
-                username nexusUsername
-                password nexusPassword
-            }
+            url offlineRepositoryRoot
         }
 
         maven {
@@ -35,52 +22,53 @@ buildscript {
 
         classpath "org.springframework.boot:spring-boot-gradle-plugin:$spring_boot_version"
         classpath "io.spring.gradle:dependency-management-plugin:0.5.6.RELEASE"
-        classpath "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:2.6.2"
-        classpath "net.researchgate:gradle-release:2.6.0"
+        classpath 'gradle.plugin.io.pry.gradle.offline_dependencies:gradle-offline-dependencies-plugin:0.4'
     }
 }
 
 apply plugin: "java"
 apply plugin: "org.springframework.boot"
 apply plugin: "io.spring.dependency-management"
-apply plugin: "org.sonarqube"
-apply plugin: "maven-publish"
-apply plugin: "net.researchgate.release"
+/*apply plugin: 'io.pry.gradle.offline_dependencies'*/
 
-dependencies {
-    compile "org.springframework.boot:spring-boot-starter-web"
-    compile("org.springframework.boot:spring-boot-starter-actuator")
-    compile("org.springframework.boot:spring-boot-starter")
-}
+bootJar.archiveName = "helloworld-simple.jar"
 
-publishing {
-    publications {
-        maven(MavenPublication) {
 
-            from components.java
+repositories {
+    mavenCentral()
 
-            repositories {
-                maven {
-
-                    if (project.version.endsWith("-SNAPSHOT")) {
-                        url "https://nexus.k8.wildwidewest.xyz/repository/maven-snapshots/"
-                    } else {
-                        url "https://nexus.k8.wildwidewest.xyz/repository/maven-releases/"
-                    }
-
-                    credentials {
-                        username nexusUsername
-                        password nexusPassword
-                    }
-                }
-            }
-        }
+    maven {
+        url "https://plugins.gradle.org/m2/"
     }
 }
 
-release {
-    failOnUnversionedFiles = false
-    versionPropertyFile = "version.properties"
+/*
+repositories {
+    maven {
+        url offlineRepositoryRoot
+    }
 }
 
-afterReleaseBuild.dependsOn publish
+
+offlineDependencies {
+    repositories {
+        mavenCentral()
+
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+}
+*/
+
+dependencies {
+    compile "org.springframework.boot:spring-boot-starter-web"
+    compile "org.springframework.boot:spring-boot-starter-actuator"
+    compile "org.springframework.boot:spring-boot-starter"
+    compile 'ch.qos.logback:logback-core:1.2.3'
+    compile 'ch.qos.logback:logback-classic:1.2.3'
+    compile 'ch.qos.logback.contrib:logback-jackson:0.1.5'
+    compile 'ch.qos.logback.contrib:logback-json-classic:0.1.5'
+    compile 'com.fasterxml.jackson.core:jackson-databind:2.9.3'
+}
+
