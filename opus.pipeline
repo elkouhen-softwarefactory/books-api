@@ -1,0 +1,23 @@
+PUT _ingest/pipeline/opus_log
+{
+  "description": "OPUS Logs",
+  "processors": [
+    {
+      "grok": {
+        "field": "message",
+        "patterns": [
+          "%{DATESTAMP:opus.data}  %{LOGLEVEL:opus.loglevel} %{PROG:opus.processID} --- %{SYSLOG5424SD:opus.thread} %{JAVACLASS:opus.class}   : %{GREEDYDATA:opus.message}"
+        ],
+        "ignore_missing": true
+      }
+    }
+  ],
+  "on_failure": [
+    {
+      "set": {
+        "field": "opus.error.message",
+        "value": ""
+      }
+    }
+  ]
+}
