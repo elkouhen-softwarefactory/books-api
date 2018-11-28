@@ -16,4 +16,4 @@ RUN mvn package
 
 EXPOSE 8080
 
-CMD java -jar target/books.jar
+CMD java -jar target/books-api.jar

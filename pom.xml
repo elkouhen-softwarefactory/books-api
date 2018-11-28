@@ -95,7 +95,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <finalName>books-api-simple</finalName>
+                    <finalName>books-api</finalName>
                 </configuration>
             </plugin>
         </plugins>
