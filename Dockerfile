@@ -2,7 +2,7 @@ FROM maven:3.6.0-jdk-11
 
 MAINTAINER mehdi.elkouhen@softeam.fr
 
-WORKDIR /apps/helloworld
+WORKDIR /apps/books
 
 COPY pom.xml ./
 
@@ -16,4 +16,4 @@ RUN mvn package
 
 EXPOSE 8080
 
-CMD java -jar target/helloworld-simple.jar
+CMD java -jar target/books.jar

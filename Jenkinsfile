@@ -3,7 +3,7 @@
 def utils = new DeployHelper(this)
 
 // pod utilisé pour la compilation du projet
-podTemplate(label: 'helloworld-simple-pod', nodeSelector: 'medium', containers: [
+podTemplate(label: 'books-api-pod', nodeSelector: 'medium', containers: [
 
         // le slave jenkins
         containerTemplate(name: 'jnlp', image: 'jenkinsci/jnlp-slave:alpine'),
@@ -21,7 +21,7 @@ podTemplate(label: 'helloworld-simple-pod', nodeSelector: 'medium', containers: 
         volumes: [hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/docker.sock')]
 ) {
 
-    node('helloworld-simple-pod') {
+    node('books-api-pod') {
 
         def branch = env.JOB_NAME.replaceFirst('.+/', '');
 
@@ -102,7 +102,7 @@ podTemplate(label: 'helloworld-simple-pod', nodeSelector: 'medium', containers: 
                 build job: "/Helloworld-K8s/chart-run/master",
                         wait: false,
                         parameters: [string(name: 'image', value: "$now"),
-                                     string(name: 'chart', value: "helloworld-simple")]
+                                     string(name: 'chart', value: "books-api")]
             }
         }
     }
