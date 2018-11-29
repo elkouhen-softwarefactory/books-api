@@ -1,0 +1,32 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    app: books-api
+    chart: books-api-0.1.0
+    heritage: Tiller
+    release: books-api
+  name: books-api
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      app: books-api
+      release: books-api
+  template:
+    metadata:
+      labels:
+        app: books-api
+        release: books-api
+    spec:
+      containers:
+      - env:
+        - name: SPRING_DATASOURCE_URL
+          value: jdbc:h2:tcp://books-api-h2:1521/~/books
+        image: elkouhen/books-api:latest
+        imagePullPolicy: IfNotPresent
+        name: books-api
+        ports:
+        - containerPort: 8080
+          name: http
+          protocol: TCP

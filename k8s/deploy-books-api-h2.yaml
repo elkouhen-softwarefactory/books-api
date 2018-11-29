@@ -1,0 +1,29 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    app: h2
+    chart: h2-0.1.0
+    heritage: Tiller
+    release: books-api
+  name: books-api-h2
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      app: h2
+      release: books-api
+  template:
+    metadata:
+      labels:
+        app: h2
+        release: books-api
+    spec:
+      containers:
+      - image: 1000kit/h2:1.4.193
+        imagePullPolicy: IfNotPresent
+        name: h2
+        ports:
+        - containerPort: 1521
+          name: jdbc
+          protocol: TCP

@@ -1,0 +1,13 @@
+apiVersion: skaffold/v1alpha5
+kind: Config
+build:
+  artifacts:
+  - image: elkouhen/books-api
+    jibMaven: {}
+deploy:
+  kubectl:
+    manifests:
+    - k8s/deploy-books-api-h2.yaml
+    - k8s/deploy-books-api.yaml
+    - k8s/svc-books-api-h2.yaml
+    - k8s/svc-books-api.yaml

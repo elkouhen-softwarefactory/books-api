@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: books-api
+    chart: books-api-0.1.0
+    heritage: Tiller
+    release: books-api
+  name: books-api
+  namespace: default
+spec:
+  ports:
+  - name: http
+    port: 80
+    protocol: TCP
+    targetPort: http
+  selector:
+    app: books-api
+    release: books-api
