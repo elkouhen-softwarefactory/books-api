@@ -4,10 +4,13 @@ build:
   artifacts:
   - image: elkouhen/books-api
     jibMaven: {}
+    #docker:
+    #  dockerfile: Dockerfile
+  #- image: 1000kit/h2
 deploy:
-  kubectl:
-    manifests:
-    - k8s/deploy-books-api-h2.yaml
-    - k8s/deploy-books-api.yaml
-    - k8s/svc-books-api-h2.yaml
-    - k8s/svc-books-api.yaml
+  helm:
+    releases:
+    - name: books-api-dev
+      chartPath: ../charts/books-api
+      setValues:
+        auth.htpassword: dXNlcjE6JGFwcjEkcHFTb3VWTE4kQ2EvQVNKSFhLU2dJSlpsd295andtMQ==
