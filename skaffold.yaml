@@ -2,7 +2,7 @@ apiVersion: skaffold/v1alpha5
 kind: Config
 build:
   artifacts:
-  - image: elkouhen/books-api
+  - image: registry.k8.wildwidewest.xyz/repository/docker-repository/opus/books-api
     jibMaven: {}
     #docker:
     #  dockerfile: Dockerfile

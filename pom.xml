@@ -92,6 +92,14 @@
     <build>
         <plugins>
             <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.5.1</version>
+                <configuration>
+                    <source>11</source>
+                    <target>11</target>
+                </configuration>
+            </plugin>
+            <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
@@ -103,6 +111,7 @@
                 <artifactId>jib-maven-plugin</artifactId>
                 <version>0.9.11</version>
                 <configuration>
+                    <allowInsecureRegistries>true</allowInsecureRegistries>
                     <container>
                         <jvmFlags>
                             <jvmFlag>-Djava.security.egd=file:/dev/./urandom</jvmFlag>

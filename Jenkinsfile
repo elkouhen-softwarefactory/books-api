@@ -1,6 +1,5 @@
-@Library('deploy-library') import com.softeam.deploy.DeployHelper
-
-def utils = new DeployHelper(this)
+#!groovy
+import java.text.*
 
 // pod utilisé pour la compilation du projet
 podTemplate(label: 'books-api-pod', nodeSelector: 'medium', containers: [
@@ -9,7 +8,7 @@ podTemplate(label: 'books-api-pod', nodeSelector: 'medium', containers: [
         containerTemplate(name: 'jnlp', image: 'jenkinsci/jnlp-slave:alpine'),
 
         // un conteneur pour le build maven
-        containerTemplate(name: 'gradle', image: 'elkouhen/gradle-docker', privileged: true, ttyEnabled: true, command: 'cat'),
+        containerTemplate(name: 'maven', image: 'maven', privileged: true, ttyEnabled: true, command: 'cat'),
 
         // un conteneur pour construire les images docker
         containerTemplate(name: 'docker', image: 'tmaier/docker-compose', command: 'cat', ttyEnabled: true),
@@ -24,8 +23,6 @@ podTemplate(label: 'books-api-pod', nodeSelector: 'medium', containers: [
     node('books-api-pod') {
 
         def branch = env.JOB_NAME.replaceFirst('.+/', '');
-
-        String now = ""
 
         properties([
                 parameters([
@@ -42,31 +39,17 @@ podTemplate(label: 'books-api-pod', nodeSelector: 'medium', containers: [
                 )
         ])
 
+        def now = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date())
+
         stage('CHECKOUT') {
             checkout scm
         }
 
-        container('gradle') {
+        container('maven') {
 
             stage('BUILD SOURCES') {
                 withCredentials([string(credentialsId: 'sonarqube_token', variable: 'token')]) {
-
-                    configFileProvider([configFile(fileId: 'gradle.properties', targetLocation: "gradle.properties"),
-                                        configFile(fileId: 'id_rsa', targetLocation: "/home/jenkins/.ssh/id_rsa"),
-                                        configFile(fileId: 'id_rsa.pub', targetLocation: "/home/jenkins/.ssh/id_rsa.pub")
-
-                    ]) {
-
-                        if (!params.DO_RELEASE) {
-
-                            sh 'gradle clean build publish -Dsonar.login=${token}'
-                        } else {
-
-                            utils.configureGIT()
-
-                            sh "gradle release -Prelease.useAutomaticVersion=true -Prelease.releaseVersion=${params.RELEASE_VERSION} -Prelease.newVersion=${params.NEXT_DEV_VERSION}"
-                        }
-                    }
+                    sh 'mvn clean package sonar:sonar -Dsonar.host.url=http://sonarqube-sonarqube:9000 -Dsonar.java.binaries=target -Dsonar.login=${token} -DskipTests'
                 }
             }
         }
@@ -75,23 +58,19 @@ podTemplate(label: 'books-api-pod', nodeSelector: 'medium', containers: [
 
             stage('BUILD DOCKER IMAGE') {
 
-                utils.configureDockerRegistry()
+                sh 'mkdir /etc/docker'
+
+                // le registry est insecure (pas de https)
+                sh 'echo {"insecure-registries" : ["registry.k8.wildwidewest.xyz"]} > /etc/docker/daemon.json'
 
                 withCredentials([usernamePassword(credentialsId: 'nexus_user', usernameVariable: 'username', passwordVariable: 'password')]) {
 
                     sh "docker login -u ${username} -p ${password} registry.k8.wildwidewest.xyz"
                 }
 
-                if (!params.DO_RELEASE) {
-                    now = sh (script: 'cat version.properties | cut -d= -f2', returnStdout: true).trim()
+                sh "tag=$now docker-compose build"
 
-                } else {
-                    now = params.RELEASE_VERSION
-                }
-
-                sh "tag=${now} docker-compose build"
-
-                sh "tag=${now} docker-compose push"
+                sh "tag=$now docker-compose push"
             }
         }
 

@@ -1,6 +1,6 @@
 version: '3.2'
 services:
 
-  helloworld-simple:
-    image: "elkouhen/books:${tag}"
+  books-api:
+    image: "registry.k8.wildwidewest.xyz/repository/docker-repository/opus/books-api:${tag}"
     build: .
