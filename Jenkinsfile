@@ -44,15 +44,6 @@ podTemplate(label: 'books-api-pod', nodeSelector: 'medium', containers: [
             checkout scm
         }
 
-        /*container('maven') {
-
-            stage('BUILD SOURCES') {
-                withCredentials([string(credentialsId: 'sonarqube_token', variable: 'token')]) {
-                    sh 'mvn clean package sonar:sonar -Dsonar.host.url=http://sonarqube-sonarqube:9000 -Dsonar.java.binaries=target -Dsonar.login=${token} -DskipTests'
-                }
-            }
-        } */
-
         container('docker') {
 
             stage('DOCKER LOGIN') {
@@ -69,21 +60,30 @@ podTemplate(label: 'books-api-pod', nodeSelector: 'medium', containers: [
             }
         }
 
-        container('skaffold') {
+        container('maven') {
 
-            stage('BUILD DOCKER IMAGE') {
+            container('skaffold') {
 
-                sh "skaffold run"
+                stage('BUILD SOURCES') {
+
+                    //sh 'mvn clean package'
+                    sh "skaffold run"
+                }
             }
         }
 
-        stage('RUN') {
+        /* stage('BUILD DOCKER IMAGE') {
 
-            build job: "/Helloworld-K8s/chart-run/master",
-                    wait: false,
-                    parameters: [string(name: 'image', value: "$now"),
-                                 string(name: 'chart', value: "books-api")]
-        }
-
+            sh "skaffold run"
+        } */
     }
+
+    stage('RUN') {
+
+        build job: "/Helloworld-K8s/chart-run/master",
+                wait: false,
+                parameters: [string(name: 'image', value: "$now"),
+                             string(name: 'chart', value: "books-api")]
+    }
+
 }
