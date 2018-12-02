@@ -28,10 +28,6 @@ podTemplate(label: 'books-api-pod', nodeSelector: 'medium', containers: [
         def branch = env.JOB_NAME.replaceFirst('.+/', '');
 
         properties([
-                parameters([
-                        booleanParam(defaultValue: false, description: '', name: 'DO_RELEASE'),
-                        string(defaultValue: '', description: '', name: 'RELEASE_VERSION', trim: false),
-                        string(defaultValue: '', description: '', name: 'NEXT_DEV_VERSION', trim: false)]),
                 buildDiscarder(
                         logRotator(
                                 artifactDaysToKeepStr: '1',
@@ -57,9 +53,9 @@ podTemplate(label: 'books-api-pod', nodeSelector: 'medium', containers: [
             }
         } */
 
-        container('skaffold') {
+        container('docker') {
 
-            stage('BUILD DOCKER IMAGE') {
+            stage('DOCKER LOGIN') {
 
                 sh 'mkdir /etc/docker'
 
@@ -70,11 +66,14 @@ podTemplate(label: 'books-api-pod', nodeSelector: 'medium', containers: [
 
                     sh "docker login -u ${username} -p ${password} registry.k8.wildwidewest.xyz"
                 }
+            }
+        }
+
+        container('skaffold') {
+
+            stage('BUILD DOCKER IMAGE') {
 
                 sh "skaffold run"
-                /* sh "tag=$now docker-compose build"
-
-                sh "tag=$now docker-compose push" */
             }
         }
 
