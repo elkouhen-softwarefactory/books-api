@@ -11,9 +11,9 @@ podTemplate(label: 'books-api-pod', nodeSelector: 'medium', containers: [
         containerTemplate(name: 'maven', image: 'maven', privileged: true, ttyEnabled: true, command: 'cat'),
 
         // un conteneur pour construire les images docker
-        //containerTemplate(name: 'docker', image: 'tmaier/docker-compose', command: 'cat', ttyEnabled: true),
+        containerTemplate(name: 'docker', image: 'tmaier/docker-compose', command: 'cat', ttyEnabled: true),
 
-        //docker pull
+        // un conteneur pour skaffold
         containerTemplate(name: 'skaffold', image: 'addisonbair/skaffold', command: 'cat', ttyEnabled: true),
 
         // un conteneur pour déployer les services kubernetes
