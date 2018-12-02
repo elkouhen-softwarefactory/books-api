@@ -14,7 +14,7 @@ podTemplate(label: 'books-api-pod', nodeSelector: 'medium', containers: [
         containerTemplate(name: 'docker', image: 'tmaier/docker-compose', command: 'cat', ttyEnabled: true),
 
         // un conteneur pour skaffold
-        containerTemplate(name: 'skaffold', image: 'addisonbair/skaffold', command: 'cat', ttyEnabled: true),
+        containerTemplate(name: 'skaffold', image: 'quay.io/opspresso/skaffold', command: 'cat', ttyEnabled: true),
 
         // un conteneur pour déployer les services kubernetes
         containerTemplate(name: 'kubectl', image: 'lachlanevenson/k8s-kubectl', command: 'cat', ttyEnabled: true)],
