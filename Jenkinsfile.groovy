@@ -11,7 +11,10 @@ podTemplate(label: 'books-api-pod', nodeSelector: 'medium', containers: [
         containerTemplate(name: 'maven', image: 'maven', privileged: true, ttyEnabled: true, command: 'cat'),
 
         // un conteneur pour construire les images docker
-        containerTemplate(name: 'docker', image: 'tmaier/docker-compose', command: 'cat', ttyEnabled: true),
+        //containerTemplate(name: 'docker', image: 'tmaier/docker-compose', command: 'cat', ttyEnabled: true),
+
+        //docker pull
+        containerTemplate(name: 'skaffold', image: 'addisonbair/skaffold', command: 'cat', ttyEnabled: true),
 
         // un conteneur pour déployer les services kubernetes
         containerTemplate(name: 'kubectl', image: 'lachlanevenson/k8s-kubectl', command: 'cat', ttyEnabled: true)],
@@ -45,16 +48,16 @@ podTemplate(label: 'books-api-pod', nodeSelector: 'medium', containers: [
             checkout scm
         }
 
-        container('maven') {
+        /*container('maven') {
 
             stage('BUILD SOURCES') {
                 withCredentials([string(credentialsId: 'sonarqube_token', variable: 'token')]) {
                     sh 'mvn clean package sonar:sonar -Dsonar.host.url=http://sonarqube-sonarqube:9000 -Dsonar.java.binaries=target -Dsonar.login=${token} -DskipTests'
                 }
             }
-        }
+        } */
 
-        container('docker') {
+        container('skaffold') {
 
             stage('BUILD DOCKER IMAGE') {
 
@@ -68,21 +71,20 @@ podTemplate(label: 'books-api-pod', nodeSelector: 'medium', containers: [
                     sh "docker login -u ${username} -p ${password} registry.k8.wildwidewest.xyz"
                 }
 
-                sh "tag=$now docker-compose build"
+                sh "skaffold run"
+                /* sh "tag=$now docker-compose build"
 
-                sh "tag=$now docker-compose push"
+                sh "tag=$now docker-compose push" */
             }
         }
 
-        container('kubectl') {
+        stage('RUN') {
 
-            stage('RUN') {
-
-                build job: "/Helloworld-K8s/chart-run/master",
-                        wait: false,
-                        parameters: [string(name: 'image', value: "$now"),
-                                     string(name: 'chart', value: "books-api")]
-            }
+            build job: "/Helloworld-K8s/chart-run/master",
+                    wait: false,
+                    parameters: [string(name: 'image', value: "$now"),
+                                 string(name: 'chart', value: "books-api")]
         }
+
     }
 }

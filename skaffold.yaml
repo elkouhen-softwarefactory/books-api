@@ -4,15 +4,14 @@ build:
   artifacts:
   - image: registry.k8.wildwidewest.xyz/repository/docker-repository/opus/books-api
     jibMaven: {}
-    #docker:
-    #  dockerfile: Dockerfile
-  #- image: 1000kit/h2
 deploy:
   helm:
     releases:
-    - name: books-api
+    - name: books-api-dev
       chartPath: ../charts/books-api
       setValues:
         auth.htpassword: dXNlcjE6JGFwcjEkcHFTb3VWTE4kQ2EvQVNKSFhLU2dJSlpsd295andtMQ==
+        ingress.hosts[0]: books-api-dev.k8.wildwidewest.xyz
+        ingress.tls[0].hosts[0]: books-api-dev.k8.wildwidewest.xyz
       setValueTemplates:
         image.tag: "{{.DIGEST}}"
