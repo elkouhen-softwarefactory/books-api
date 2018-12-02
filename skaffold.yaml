@@ -10,7 +10,9 @@ build:
 deploy:
   helm:
     releases:
-    - name: books-api-dev
+    - name: books-api
       chartPath: ../charts/books-api
       setValues:
         auth.htpassword: dXNlcjE6JGFwcjEkcHFTb3VWTE4kQ2EvQVNKSFhLU2dJSlpsd295andtMQ==
+      setValueTemplates:
+        image.tag: "{{.DIGEST}}"
