@@ -13,9 +13,6 @@ podTemplate(label: 'books-api-pod', nodeSelector: 'medium', containers: [
         // un conteneur pour construire les images docker
         containerTemplate(name: 'docker', image: 'tmaier/docker-compose', command: 'cat', ttyEnabled: true),
 
-        // un conteneur pour skaffold
-        containerTemplate(name: 'skaffold', image: 'quay.io/opspresso/skaffold', command: 'cat', ttyEnabled: true),
-
         // un conteneur pour déployer les services kubernetes
         containerTemplate(name: 'kubectl', image: 'lachlanevenson/k8s-kubectl', command: 'cat', ttyEnabled: true)],
 
@@ -44,9 +41,18 @@ podTemplate(label: 'books-api-pod', nodeSelector: 'medium', containers: [
             checkout scm
         }
 
+        container('maven') {
+
+            stage('BUILD SOURCES') {
+                withCredentials([string(credentialsId: 'sonarqube_token', variable: 'token')]) {
+                    sh 'mvn clean package sonar:sonar -Dsonar.host.url=http://sonarqube-sonarqube:9000 -Dsonar.java.binaries=target -Dsonar.login=${token} -DskipTests'
+                }
+            }
+        }
+
         container('docker') {
 
-            stage('DOCKER LOGIN') {
+            stage('BUILD DOCKER IMAGE') {
 
                 sh 'mkdir /etc/docker'
 
@@ -57,33 +63,22 @@ podTemplate(label: 'books-api-pod', nodeSelector: 'medium', containers: [
 
                     sh "docker login -u ${username} -p ${password} registry.k8.wildwidewest.xyz"
                 }
+
+                sh "tag=$now docker-compose build"
+
+                sh "tag=$now docker-compose push"
             }
         }
 
-        container('maven') {
+        container('kubectl') {
 
-            container('skaffold') {
+            stage('RUN') {
 
-                stage('BUILD SOURCES') {
-
-                    //sh 'mvn clean package'
-                    sh "skaffold run"
-                }
+                build job: "/Helloworld-K8s/chart-run/master",
+                        wait: false,
+                        parameters: [string(name: 'image', value: "$now"),
+                                     string(name: 'chart', value: "books-api")]
             }
         }
-
-        /* stage('BUILD DOCKER IMAGE') {
-
-            sh "skaffold run"
-        } */
     }
-
-    stage('RUN') {
-
-        build job: "/Helloworld-K8s/chart-run/master",
-                wait: false,
-                parameters: [string(name: 'image', value: "$now"),
-                             string(name: 'chart', value: "books-api")]
-    }
-
 }
