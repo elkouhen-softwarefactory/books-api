@@ -45,40 +45,23 @@ podTemplate(label: 'books-api-pod', nodeSelector: 'medium', containers: [
 
             stage('BUILD SOURCES') {
                 withCredentials([string(credentialsId: 'sonarqube_token', variable: 'token')]) {
-                    sh 'mvn clean package sonar:sonar -Dsonar.host.url=http://sonarqube-sonarqube:9000 -Dsonar.java.binaries=target -Dsonar.login=${token} -DskipTests'
+
+                    sh 'curl -Lo skaffold https://storage.googleapis.com/skaffold/releases/latest/skaffold-linux-amd64 && chmod +x skaffold && sudo mv skaffold /usr/local/bin'
+
+                    sh 'skaffold build'
+
+                    // sh 'mvn clean package sonar:sonar -Dsonar.host.url=http://sonarqube-sonarqube:9000 -Dsonar.java.binaries=target -Dsonar.login=${token} -DskipTests'
                 }
             }
         }
 
-        container('docker') {
+        stage('RUN') {
 
-            stage('BUILD DOCKER IMAGE') {
-
-                sh 'mkdir /etc/docker'
-
-                // le registry est insecure (pas de https)
-                sh 'echo {"insecure-registries" : ["registry.k8.wildwidewest.xyz"]} > /etc/docker/daemon.json'
-
-                withCredentials([usernamePassword(credentialsId: 'nexus_user', usernameVariable: 'username', passwordVariable: 'password')]) {
-
-                    sh "docker login -u ${username} -p ${password} registry.k8.wildwidewest.xyz"
-                }
-
-                sh "tag=$now docker-compose build"
-
-                sh "tag=$now docker-compose push"
-            }
+            build job: "/Helloworld-K8s/chart-run/master",
+                    wait: false,
+                    parameters: [string(name: 'image', value: "$now"),
+                                 string(name: 'chart', value: "books-api")]
         }
 
-        container('kubectl') {
-
-            stage('RUN') {
-
-                build job: "/Helloworld-K8s/chart-run/master",
-                        wait: false,
-                        parameters: [string(name: 'image', value: "$now"),
-                                     string(name: 'chart', value: "books-api")]
-            }
-        }
     }
 }
