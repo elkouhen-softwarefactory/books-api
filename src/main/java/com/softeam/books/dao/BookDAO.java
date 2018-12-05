@@ -10,6 +10,8 @@ import java.util.Collection;
 @Component
 public class BookDAO {
 
+    private static final String SELECT_FROM_T_BOOK = "SELECT * FROM T_BOOK";
+
     private final JdbcTemplate jdbcTemplate;
 
     @Autowired
@@ -18,6 +20,6 @@ public class BookDAO {
     }
 
     public Collection<BookDTO> findAll() {
-        return jdbcTemplate.query("SELECT * from T_BOOK", (resultSet, i) -> new BookDTO(resultSet.getInt("ID"), resultSet.getString("TITLE")));
+        return jdbcTemplate.query(SELECT_FROM_T_BOOK, (resultSet, i) -> new BookDTO(resultSet.getInt("ID"), resultSet.getString("TITLE")));
     }
 }
