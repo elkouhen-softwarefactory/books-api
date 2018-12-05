@@ -46,7 +46,8 @@ podTemplate(label: 'books-api-pod', nodeSelector: 'medium', containers: [
             stage('BUILD SOURCES') {
                 withCredentials([string(credentialsId: 'sonarqube_token', variable: 'token')]) {
 
-                    sh 'mvn clean package sonar:sonar -Dsonar.host.url=http://sonarqube-sonarqube:9000 -Dsonar.java.binaries=target -Dsonar.login=${token} -DskipTests'
+                    // sh 'mvn clean package sonar:sonar -Dsonar.host.url=http://sonarqube-sonarqube:9000 -Dsonar.java.binaries=target -Dsonar.login=${token} -DskipTests'
+                     sh 'mvn clean package'
                 }
             }
         }
