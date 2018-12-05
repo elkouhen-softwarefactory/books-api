@@ -41,6 +41,16 @@ podTemplate(label: 'books-api-pod', nodeSelector: 'medium', containers: [
             checkout scm
         }
 
+        container('maven') {
+
+            stage('BUILD SOURCES') {
+                withCredentials([string(credentialsId: 'sonarqube_token', variable: 'token')]) {
+
+                    sh 'mvn clean package sonar:sonar -Dsonar.host.url=http://sonarqube-sonarqube:9000 -Dsonar.java.binaries=target -Dsonar.login=${token} -DskipTests'
+                }
+            }
+        }
+
         container('docker') {
 
             stage('BUILD DOCKER IMAGE') {
@@ -54,20 +64,10 @@ podTemplate(label: 'books-api-pod', nodeSelector: 'medium', containers: [
 
                     sh "docker login -u ${username} -p ${password} registry.k8.wildwidewest.xyz"
                 }
-            }
-        }
 
-        container('maven') {
+                sh "tag=$now docker-compose build"
 
-            stage('BUILD SOURCES') {
-                withCredentials([string(credentialsId: 'sonarqube_token', variable: 'token')]) {
-
-                    sh 'curl -Lo skaffold https://storage.googleapis.com/skaffold/releases/latest/skaffold-linux-amd64 && chmod +x skaffold && mv skaffold /usr/local/bin'
-
-                    sh 'skaffold build'
-
-                    // sh 'mvn clean package sonar:sonar -Dsonar.host.url=http://sonarqube-sonarqube:9000 -Dsonar.java.binaries=target -Dsonar.login=${token} -DskipTests'
-                }
+                sh "tag=$now docker-compose push"
             }
         }
 
