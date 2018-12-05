@@ -41,6 +41,22 @@ podTemplate(label: 'books-api-pod', nodeSelector: 'medium', containers: [
             checkout scm
         }
 
+        container('docker') {
+
+            stage('BUILD DOCKER IMAGE') {
+
+                sh 'mkdir /etc/docker'
+
+                // le registry est insecure (pas de https)
+                sh 'echo {"insecure-registries" : ["registry.k8.wildwidewest.xyz"]} > /etc/docker/daemon.json'
+
+                withCredentials([usernamePassword(credentialsId: 'nexus_user', usernameVariable: 'username', passwordVariable: 'password')]) {
+
+                    sh "docker login -u ${username} -p ${password} registry.k8.wildwidewest.xyz"
+                }
+            }
+        }
+
         container('maven') {
 
             stage('BUILD SOURCES') {
