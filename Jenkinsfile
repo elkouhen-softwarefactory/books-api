@@ -41,7 +41,7 @@ podTemplate(label: 'books-api-pod', nodeSelector: 'medium', containers: [
             checkout scm
         }
 
-        container('maven') {
+        /* container('maven') {
 
             stage('BUILD SOURCES') {
                 withCredentials([string(credentialsId: 'sonarqube_token', variable: 'token')]) {
@@ -50,7 +50,7 @@ podTemplate(label: 'books-api-pod', nodeSelector: 'medium', containers: [
                      sh 'mvn clean package'
                 }
             }
-        }
+        } */
 
         container('docker') {
 
