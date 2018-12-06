@@ -74,7 +74,7 @@ podTemplate(label: 'books-api-pod', nodeSelector: 'medium', containers: [
 
         stage('RUN') {
 
-            build job: "/Helloworld-K8s/chart-run/master",
+            build job: "/SofteamOuest-Opus/chart-run/master",
                     wait: false,
                     parameters: [string(name: 'image', value: "$now"),
                                  string(name: 'chart', value: "books-api")]
