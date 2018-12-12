@@ -113,9 +113,9 @@
                 <version>0.9.11</version>
                 <configuration>
                     <allowInsecureRegistries>true</allowInsecureRegistries>
-                    <to>
+                    <!--to>
                         <image>registry.k8.wildwidewest.xyz/repository/docker-repository/opus/books-api</image>
-                    </to>
+                    </to-->
                     <container>
                         <jvmFlags>
                             <jvmFlag>-Djava.security.egd=file:/dev/./urandom</jvmFlag>
