@@ -6,7 +6,7 @@ PUT _ingest/pipeline/opus_log
       "grok": {
         "field": "message",
         "patterns": [
-          "%{DATESTAMP:opus.data}  %{LOGLEVEL:opus.loglevel} %{PROG:opus.processID} --- %{SYSLOG5424SD:opus.thread} %{JAVACLASS:opus.class}   : %{GREEDYDATA:opus.message}"
+          "%{TIMESTAMP_ISO8601:opus.date} - %{LOGLEVEL:opus.loglevel}  - %{JAVACLASS:opus.class} - (%{INT:opus.code_error})? - (%{INT:opus.correlation_id})? - %{GREEDYDATA:opus.message} -(%{GREEDYDATA:opus.exception})?"
         ],
         "ignore_missing": true
       }
