@@ -3,7 +3,10 @@ package com.softeam.books.dto;
 public class BookDTO {
 
     private int id;
+
     private String title;
+
+    private String author;
 
     public BookDTO() {
     }

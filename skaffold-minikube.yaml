@@ -1,0 +1,17 @@
+apiVersion: skaffold/v1beta1
+kind: Config
+build:
+  artifacts:
+  - image: localhost:5000/opus/books-api
+    jibMaven: {}
+deploy:
+  helm:
+    releases:
+    - name: books-api-dev
+      chartPath: ../charts/books-api
+      setValues:
+        auth.htpassword: dXNlcjE6JGFwcjEkcHFTb3VWTE4kQ2EvQVNKSFhLU2dJSlpsd295andtMQ==
+        ingress.enabled: false
+        image.repository: localhost:5000/opus/books-api
+        image.tag: latest
+        service.type: NodePort
