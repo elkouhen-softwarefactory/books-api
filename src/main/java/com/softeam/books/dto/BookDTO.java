@@ -11,9 +11,10 @@ public class BookDTO {
     public BookDTO() {
     }
 
-    public BookDTO(int id, String title) {
+    public BookDTO(int id, String title, String author) {
         this.id = id;
         this.title = title;
+        this.author = author;
     }
 
     public int getId() {
@@ -30,5 +31,13 @@ public class BookDTO {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
     }
 }

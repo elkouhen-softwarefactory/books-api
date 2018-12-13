@@ -14,6 +14,10 @@ public class BookDAO {
 
     private static final String SELECT_FROM_T_BOOK = "SELECT * FROM T_BOOK";
 
+    private static final String TITLE = "TITLE";
+    private static final String ID = "ID";
+    private static final String AUTHORS = "AUTHORS";
+
     private final JdbcTemplate jdbcTemplate;
 
     @Autowired
@@ -26,6 +30,7 @@ public class BookDAO {
     }
 
     private BookDTO mapRow(ResultSet resultSet, int i) throws SQLException {
-        return new BookDTO(resultSet.getInt("ID"), resultSet.getString("TITLE"));
+        return new BookDTO(resultSet.getInt(ID), resultSet.getString(TITLE), resultSet.getString(AUTHORS));
     }
 }
+
