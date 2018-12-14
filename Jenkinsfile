@@ -63,9 +63,9 @@ podTemplate(label: 'books-api-pod', nodeSelector: 'medium', containers: [
                     sh "docker login -u ${username} -p ${password} registry.k8.wildwidewest.xyz"
                 }
 
-sh "docker build . --tag registry.k8.wildwidewest.xyz/repository/docker-repository/opus/books-gui:$now"
+sh "docker build . --tag registry.k8.wildwidewest.xyz/repository/docker-repository/opus/books-api:$now"
 
-                sh "docker push registry.k8.wildwidewest.xyz/repository/docker-repository/opus/books-gui:$now"
+                sh "docker push registry.k8.wildwidewest.xyz/repository/docker-repository/opus/books-api:$now"
             }
         }
 
