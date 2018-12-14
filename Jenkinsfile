@@ -11,10 +11,7 @@ podTemplate(label: 'books-api-pod', nodeSelector: 'medium', containers: [
         containerTemplate(name: 'maven', image: 'maven', privileged: true, ttyEnabled: true, command: 'cat'),
 
         // un conteneur pour construire les images docker
-        containerTemplate(name: 'docker', image: 'tmaier/docker-compose', command: 'cat', ttyEnabled: true),
-
-        // un conteneur pour déployer les services kubernetes
-        containerTemplate(name: 'kubectl', image: 'lachlanevenson/k8s-kubectl', command: 'cat', ttyEnabled: true)],
+        containerTemplate(name: 'docker', image: 'docker:18.09', command: 'cat', ttyEnabled: true)],
 
         // montage nécessaire pour que le conteneur docker fonction (Docker In Docker)
         volumes: [hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/docker.sock')]
@@ -66,9 +63,9 @@ podTemplate(label: 'books-api-pod', nodeSelector: 'medium', containers: [
                     sh "docker login -u ${username} -p ${password} registry.k8.wildwidewest.xyz"
                 }
 
-                sh "tag=$now docker-compose build"
+sh "docker build . --tag registry.k8.wildwidewest.xyz/repository/docker-repository/opus/books-gui:$now"
 
-                sh "tag=$now docker-compose push"
+                sh "docker push registry.k8.wildwidewest.xyz/repository/docker-repository/opus/books-gui:$now"
             }
         }
 
