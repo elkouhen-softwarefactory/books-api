@@ -4,6 +4,9 @@ build:
   artifacts:
   - image: registry.k8.wildwidewest.xyz/repository/docker-repository/opus/books-api
     jibMaven: {}
+  tagPolicy:
+    envTemplate:
+      template: "{{.IMAGE_NAME}}:{{.TAG}}"
 deploy:
   helm:
     releases:
@@ -13,7 +16,7 @@ deploy:
         auth.htpassword: dXNlcjE6JGFwcjEkcHFTb3VWTE4kQ2EvQVNKSFhLU2dJSlpsd295andtMQ==
         h2.enabled: false
       setValueTemplates:
-        image.tag: "{{.DIGEST}}"
+        image.tag: "{{.TAG}}"
       overrides:
         ingress:
           secretName: books-api-dev-secret
