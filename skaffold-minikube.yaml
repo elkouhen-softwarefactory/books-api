@@ -4,6 +4,9 @@ build:
   artifacts:
   - image: localhost:5000/opus-books-api
     jibMaven: {}
+  tagPolicy:
+    envTemplate:
+      template: "{{.IMAGE_NAME}}:{{.TAG}}"
 deploy:
   helm:
     releases:
@@ -16,4 +19,4 @@ deploy:
         image.repository: localhost:5000/opus-books-api
         service.type: NodePort
       setValueTemplates:
-        image.tag: "{{.DIGEST}}"
+        image.tag: "{{.TAG}}"
