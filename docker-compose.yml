@@ -1,6 +1,0 @@
-version: '3.2'
-services:
-
-  books-api:
-    image: "registry.k8.wildwidewest.xyz/repository/docker-repository/opus/books-api:${tag}"
-    build: .
