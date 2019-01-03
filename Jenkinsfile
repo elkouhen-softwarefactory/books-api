@@ -42,18 +42,14 @@ podTemplate(label: 'books-api-pod', nodeSelector: 'medium', containers: [
 
             stage('BUILD') {
 
-                withCredentials([string(credentialsId: 'sonarqube_token', variable: 'sonarqube_tok')]) {
+                withCredentials([string(credentialsId: 'sonarqube_token', variable: 'sonarqube_tok'),
+                                 usernamePassword(credentialsId: 'nexus_user', usernameVariable: 'username', passwordVariable: 'password')]) {
 
-                    withCredentials([usernamePassword(credentialsId: 'nexus_user', usernameVariable: 'username', passwordVariable: 'password')]) {
+                    sh "docker login -u ${username} -p ${password} registry.k8.wildwidewest.xyz"
 
-                        sh "echo TOKEN ${sonarqube_tok}"
+                    sh "docker build . --build-arg SONAR_TOKEN=${sonarqube_tok} --tag registry.k8.wildwidewest.xyz/repository/docker-repository/opus/books-api:$now"
 
-                        sh "docker login -u ${username} -p ${password} registry.k8.wildwidewest.xyz"
-
-                        sh "docker build . --build_arg SONAR_TOKEN=${sonarqube_tok} --tag registry.k8.wildwidewest.xyz/repository/docker-repository/opus/books-api:$now"
-
-                        sh "docker push registry.k8.wildwidewest.xyz/repository/docker-repository/opus/books-api:$now"
-                    }
+                    sh "docker push registry.k8.wildwidewest.xyz/repository/docker-repository/opus/books-api:$now"
                 }
             }
         }
