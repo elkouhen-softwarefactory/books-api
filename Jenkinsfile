@@ -38,34 +38,19 @@ podTemplate(label: 'books-api-pod', nodeSelector: 'medium', containers: [
             checkout scm
         }
 
-        /* container('maven') {
-
-            stage('BUILD SOURCES') {
-                withCredentials([string(credentialsId: 'sonarqube_token', variable: 'token')]) {
-
-                    // sh 'mvn clean package sonar:sonar -Dsonar.host.url=http://sonarqube-sonarqube:9000 -Dsonar.java.binaries=target -Dsonar.login=${token} -DskipTests'
-                     sh 'mvn clean package'
-                }
-            }
-        } */
-
         container('docker') {
 
             stage('BUILD DOCKER IMAGE') {
 
-                sh 'mkdir /etc/docker'
-
-                // le registry est insecure (pas de https)
-                sh 'echo {"insecure-registries" : ["registry.k8.wildwidewest.xyz"]} > /etc/docker/daemon.json'
-
-                withCredentials([usernamePassword(credentialsId: 'nexus_user', usernameVariable: 'username', passwordVariable: 'password')]) {
+                withCredentials([usernamePassword(credentialsId: 'nexus_user', usernameVariable: 'username', passwordVariable: 'password'),
+                                string(credentialsId: 'sonarqube_token', variable: 'sonarqube_token')]) {
 
                     sh "docker login -u ${username} -p ${password} registry.k8.wildwidewest.xyz"
+
+                    sh "docker build . --build_arg SONAR_TOKEN=$sonarqube_token --tag registry.k8.wildwidewest.xyz/repository/docker-repository/opus/books-api:$now"
+
+                    sh "docker push registry.k8.wildwidewest.xyz/repository/docker-repository/opus/books-api:$now"
                 }
-
-                sh "docker build . --tag registry.k8.wildwidewest.xyz/repository/docker-repository/opus/books-api:$now"
-
-                sh "docker push registry.k8.wildwidewest.xyz/repository/docker-repository/opus/books-api:$now"
             }
         }
 
