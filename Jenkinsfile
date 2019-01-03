@@ -43,11 +43,11 @@ podTemplate(label: 'books-api-pod', nodeSelector: 'medium', containers: [
             stage('BUILD DOCKER IMAGE') {
 
                 withCredentials([usernamePassword(credentialsId: 'nexus_user', usernameVariable: 'username', passwordVariable: 'password'),
-                                string(credentialsId: 'sonarqube_token', variable: 'token')]) {
+                                 string(credentialsId: 'sonarqube_token', variable: 'TOKEN')]) {
 
                     sh "docker login -u ${username} -p ${password} registry.k8.wildwidewest.xyz"
 
-                    sh "docker build . --build_arg SONAR_TOKEN=${token} --tag registry.k8.wildwidewest.xyz/repository/docker-repository/opus/books-api:$now"
+                    sh "docker build . --build_arg SONAR_TOKEN=${TOKEN} --tag registry.k8.wildwidewest.xyz/repository/docker-repository/opus/books-api:$now"
 
                     sh "docker push registry.k8.wildwidewest.xyz/repository/docker-repository/opus/books-api:$now"
                 }
