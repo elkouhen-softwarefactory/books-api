@@ -42,8 +42,8 @@ podTemplate(label: 'books-api-pod', nodeSelector: 'medium', containers: [
 
             stage('BUILD DOCKER IMAGE') {
 
-                withCredentials([usernamePassword(credentialsId: 'nexus_user', usernameVariable: 'username', passwordVariable: 'password'),
-                                 string(credentialsId: 'sonarqube_token', variable: 'TOKEN')]) {
+                withCredentials([string(credentialsId: 'sonarqube_token', variable: 'TOKEN'),
+                                 usernamePassword(credentialsId: 'nexus_user', usernameVariable: 'username', passwordVariable: 'password') ]) {
 
                     sh "docker login -u ${username} -p ${password} registry.k8.wildwidewest.xyz"
 
