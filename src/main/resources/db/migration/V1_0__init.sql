@@ -13,3 +13,5 @@ INSERT INTO T_BOOK (ID, TITLE, AUTHORS) VALUES (2, 'Effective Java', 'Joshua Blo
 INSERT INTO T_BOOK (ID, TITLE, AUTHORS) VALUES (3, 'The C++ Programming Language', 'Bjarne Stroustrup');
 
 INSERT INTO T_BOOK (ID, TITLE, AUTHORS) VALUES (4, 'The Clean Coder: A Code of Conduct for Professional Programmers', 'Robert C. Martin');
+
+INSERT INTO T_BOOK (ID, TITLE, AUTHORS) VALUES (5, 'The Clean Coder: A Code of Conduct for Professional Programmers', 'Robert C. Martin');
