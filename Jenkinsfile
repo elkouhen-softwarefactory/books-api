@@ -7,9 +7,6 @@ podTemplate(label: 'books-api-pod', nodeSelector: 'medium', containers: [
         // le slave jenkins
         containerTemplate(name: 'jnlp', image: 'jenkinsci/jnlp-slave:alpine'),
 
-        // un conteneur pour le build maven
-        containerTemplate(name: 'maven', image: 'maven', privileged: true, ttyEnabled: true, command: 'cat'),
-
         // un conteneur pour construire les images docker
         containerTemplate(name: 'docker', image: 'docker:18.09', command: 'cat', ttyEnabled: true)],
 
