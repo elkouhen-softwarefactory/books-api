@@ -1,4 +1,4 @@
-apiVersion: skaffold/v1beta1
+apiVersion: skaffold/v1beta2
 kind: Config
 build:
   artifacts:
@@ -9,12 +9,13 @@ deploy:
     releases:
     - name: books-api-dev
       chartPath: ../charts/books-api
-      setValues:
-        auth.htpassword: dXNlcjE6JGFwcjEkcHFTb3VWTE4kQ2EvQVNKSFhLU2dJSlpsd295andtMQ==
-        h2.enabled: false
       setValueTemplates:
         image.tag: "{{.DIGEST}}"
       overrides:
+        auth:
+          htpassword: dXNlcjE6JGFwcjEkcHFTb3VWTE4kQ2EvQVNKSFhLU2dJSlpsd295andtMQ==
+        h2:
+          enabled: true
         ingress:
           secretName: books-api-dev-secret
           hosts:
