@@ -37,7 +37,7 @@ podTemplate(label: 'books-api-pod', nodeSelector: 'medium', containers: [
                 withCredentials([string(credentialsId: 'sonarqube_token', variable: 'sonarqube_tok'),
                                  string(credentialsId: 'registry_url', variable: 'registry_url')]) {
 
-                    withDockerRegistry(credentialsId: 'nexus_user', url: '$registry_url') {
+                    withDockerRegistry(credentialsId: 'nexus_user', url: "${registry_url}") {
                         sh "docker build . --build-arg SONAR_TOKEN=${sonarqube_tok} --tag ${registry_url}/repository/docker-repository/opus/books-api:$TAG"
 
                         sh "docker push ${registry_url}/repository/docker-repository/opus/books-api:$TAG"
