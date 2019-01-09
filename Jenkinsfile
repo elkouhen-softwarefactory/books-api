@@ -1,6 +1,3 @@
-#!groovy
-import java.text.*
-
 // pod utilisé pour la compilation du projet
 podTemplate(label: 'books-api-pod', nodeSelector: 'medium', containers: [
 
@@ -16,8 +13,6 @@ podTemplate(label: 'books-api-pod', nodeSelector: 'medium', containers: [
 
     node('books-api-pod') {
 
-        def branch = env.JOB_NAME.replaceFirst('.+/', '');
-
         properties([
                 buildDiscarder(
                         logRotator(
@@ -29,7 +24,7 @@ podTemplate(label: 'books-api-pod', nodeSelector: 'medium', containers: [
                 )
         ])
 
-        def now = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date())
+        def TAG = env.GIT_COMMIT
 
         stage('CHECKOUT') {
             checkout scm
@@ -40,13 +35,13 @@ podTemplate(label: 'books-api-pod', nodeSelector: 'medium', containers: [
             stage('BUILD') {
 
                 withCredentials([string(credentialsId: 'sonarqube_token', variable: 'sonarqube_tok'),
-                                 usernamePassword(credentialsId: 'nexus_user', usernameVariable: 'username', passwordVariable: 'password')]) {
+                                 string(credentialsId: 'registry_url', variable: 'registry_url')]) {
 
-                    sh "docker login -u ${username} -p ${password} registry.k8.wildwidewest.xyz"
+                    withDockerRegistry(credentialsId: 'nexus_user', url: '$registry_url') {
+                        sh "docker build . --build-arg SONAR_TOKEN=${sonarqube_tok} --tag ${registry_url}/repository/docker-repository/opus/books-api:$TAG"
 
-                    sh "docker build . --build-arg SONAR_TOKEN=${sonarqube_tok} --tag registry.k8.wildwidewest.xyz/repository/docker-repository/opus/books-api:$now"
-
-                    sh "docker push registry.k8.wildwidewest.xyz/repository/docker-repository/opus/books-api:$now"
+                        sh "docker push ${registry_url}/repository/docker-repository/opus/books-api:$TAG"
+                    }
                 }
             }
         }
@@ -55,7 +50,7 @@ podTemplate(label: 'books-api-pod', nodeSelector: 'medium', containers: [
 
             build job: "/SofteamOuest-Opus/chart-run/master",
                     wait: false,
-                    parameters: [string(name: 'image', value: "$now"),
+                    parameters: [string(name: 'image', value: "$TAG"),
                                  string(name: 'chart', value: "books-api")]
         }
 
