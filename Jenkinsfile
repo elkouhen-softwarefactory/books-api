@@ -27,7 +27,7 @@ podTemplate(label: 'books-api-pod', nodeSelector: 'medium', containers: [
                 )
         ])
 
-        def TAG = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date())
+        def TAG = getCommitSha() // new SimpleDateFormat("yyyyMMddHHmmss").format(new Date())
 
         stage('CHECKOUT') {
             git branch: env.BRANCH_NAME, credentialsId: 'elkouhen-github', url: 'https://github.com/SofteamOuest-Opus/books-api.git'
@@ -58,4 +58,8 @@ podTemplate(label: 'books-api-pod', nodeSelector: 'medium', containers: [
         }
 
     }
+}
+
+def getCommitSha(){
+    return sh(returnStdout: true, script: 'git rev-parse HEAD')
 }
