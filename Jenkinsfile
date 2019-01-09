@@ -31,6 +31,8 @@ podTemplate(label: 'books-api-pod', nodeSelector: 'medium', containers: [
 
         def URL = "registry.k8.wildwidewest.xyz"
 
+        def IMAGE = "opus/books-api"
+
         stage('CHECKOUT') {
             checkout scm
         }
@@ -43,9 +45,9 @@ podTemplate(label: 'books-api-pod', nodeSelector: 'medium', containers: [
                                  string(credentialsId: 'registry_url', variable: 'registry_url')]) {
 
                     withDockerRegistry(credentialsId: 'nexus_user', url: "${registry_url}") {
-                        sh "docker build . --build-arg SONAR_TOKEN=${sonarqube_tok} --tag ${URL}/repository/docker-repository/opus/books-api:$TAG"
+                        sh "docker build . --build-arg SONAR_TOKEN=${sonarqube_tok} --tag ${URL}/repository/docker-repository/${IMAGE}:$TAG"
 
-                        sh "docker push ${URL}/repository/docker-repository/opus/books-api:$TAG"
+                        sh "docker push ${URL}/repository/docker-repository/${IMAGE}:$TAG"
                     }
                 }
             }
