@@ -24,7 +24,7 @@ podTemplate(label: 'books-api-pod', nodeSelector: 'medium', containers: [
                 )
         ])
 
-        def TAG = env.GIT_COMMIT
+        def TAG = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date())
 
         stage('CHECKOUT') {
             checkout scm
