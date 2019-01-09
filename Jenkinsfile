@@ -30,7 +30,7 @@ podTemplate(label: 'books-api-pod', nodeSelector: 'medium', containers: [
         def TAG = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date())
 
         stage('CHECKOUT') {
-            checkout scm
+            git branch: env.BRANCH_NAME, credentialsId: 'elkouhen-github', url: 'https://github.com/SofteamOuest-Opus/books-api.git'
         }
 
         container('docker') {
