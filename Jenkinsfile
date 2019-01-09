@@ -28,7 +28,7 @@ podTemplate(label: 'books-api-pod', nodeSelector: 'medium', containers: [
         ])
 
         def TAG = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date())
-        
+
         def URL = "registry.k8.wildwidewest.xyz"
 
         stage('CHECKOUT') {
