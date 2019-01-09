@@ -41,9 +41,9 @@ podTemplate(label: 'books-api-pod', nodeSelector: 'medium', containers: [
                                  string(credentialsId: 'registry_url', variable: 'registry_url')]) {
 
                     withDockerRegistry(credentialsId: 'nexus_user', url: "${registry_url}") {
-                        sh "docker build . --build-arg SONAR_TOKEN=${sonarqube_tok} --tag registry.k8.wildwidewest.xyz/repository/docker-repository/opus/books-api:$TAG"
+                        sh "docker build . --build-arg SONAR_TOKEN=${sonarqube_tok} --tag ${env.REGISTRY_URL}/repository/docker-repository/opus/books-api:$TAG"
 
-                        sh "docker push registry.k8.wildwidewest.xyz/repository/docker-repository/opus/books-api:$TAG"
+                        sh "docker push ${env.REGISTRY_URL}/repository/docker-repository/opus/books-api:$TAG"
                     }
                 }
             }
