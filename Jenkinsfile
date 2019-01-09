@@ -1,3 +1,6 @@
+#!groovy
+import java.text.*
+
 // pod utilisé pour la compilation du projet
 podTemplate(label: 'books-api-pod', nodeSelector: 'medium', containers: [
 
