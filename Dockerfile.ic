@@ -14,6 +14,8 @@ COPY src/ src/
 
 RUN mvn package
 
+RUN mvn sonar:sonar -Dsonar.host.url=https://sonarqube.k8.wildwidewest.xyz -Dsonar.login=$SONAR_TOKEN
+
 EXPOSE 8080
 
 CMD java -jar /apps/books/target/books-api.jar
