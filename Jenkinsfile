@@ -27,11 +27,12 @@ podTemplate(label: 'books-api-pod', nodeSelector: 'medium', containers: [
                 )
         ])
 
-        def TAG = getCommitSha() // new SimpleDateFormat("yyyyMMddHHmmss").format(new Date())
-
         stage('CHECKOUT') {
-            git branch: env.BRANCH_NAME, credentialsId: 'elkouhen-github', url: 'https://github.com/SofteamOuest-Opus/books-api.git'
+            checkout scm
+            // git branch: env.BRANCH_NAME, credentialsId: 'elkouhen-github', url: 'https://github.com/SofteamOuest-Opus/books-api.git'
         }
+
+        def TAG = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date())
 
         container('docker') {
 
@@ -41,9 +42,9 @@ podTemplate(label: 'books-api-pod', nodeSelector: 'medium', containers: [
                                  string(credentialsId: 'registry_url', variable: 'registry_url')]) {
 
                     withDockerRegistry(credentialsId: 'nexus_user', url: "${registry_url}") {
-                        sh "docker build . --build-arg SONAR_TOKEN=${sonarqube_tok} --tag registry.k8.wildwidewest.xyz/repository/docker-repository/opus/books-api:$TAG"
+                        sh "docker build . --build-arg SONAR_TOKEN=${sonarqube_tok} --tag ${REGISTRY_URL}/repository/docker-repository/opus/books-api:$TAG"
 
-                        sh "docker push registry.k8.wildwidewest.xyz/repository/docker-repository/opus/books-api:$TAG"
+                        sh "docker push ${REGISTRY_URL}/repository/docker-repository/opus/books-api:$TAG"
                     }
                 }
             }
@@ -58,8 +59,4 @@ podTemplate(label: 'books-api-pod', nodeSelector: 'medium', containers: [
         }
 
     }
-}
-
-def getCommitSha(){
-    return sh(returnStdout: true, script: 'git rev-parse HEAD')
 }
