@@ -37,13 +37,17 @@ podTemplate(label: 'books-api-pod', nodeSelector: 'medium', containers: [
 
             stage('BUILD') {
 
-                withCredentials([string(credentialsId: 'sonarqube_token', variable: 'sonarqube_tok'),
-                                 string(credentialsId: 'registry_url', variable: 'registry_url')]) {
+                withCredentials([string(credentialsId: 'sonarqube_token', variable: 'sonarqube_tok')]) {
+
+                    withCredentials([string(credentialsId: 'registry_url', variable: 'registry_url')]) {
+
+                        // keepme
+                    }
 
                     withDockerRegistry(credentialsId: 'nexus_user', url: "${registry_url}") {
-                        sh "docker build . --build-arg SONAR_TOKEN=${sonarqube_tok} --tag ${env.REGISTRY_URL}/repository/docker-repository/opus/books-api:$TAG"
+                        sh "docker build . --build-arg SONAR_TOKEN=${sonarqube_tok} --tag ${registry_url}/repository/docker-repository/opus/books-api:$TAG"
 
-                        sh "docker push ${env.REGISTRY_URL}/repository/docker-repository/opus/books-api:$TAG"
+                        sh "docker push ${registry_url}/repository/docker-repository/opus/books-api:$TAG"
                     }
                 }
             }
