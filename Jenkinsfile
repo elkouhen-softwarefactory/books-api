@@ -24,7 +24,7 @@ podTemplate(label: 'books-api-pod', nodeSelector: 'medium', containers: [
                                 daysToKeepStr: '3',
                                 numToKeepStr: '3'
                         )),
-                pipelineTriggers([pollSCM('*/15 * * * *')])
+                pipelineTriggers([pollSCM('*/1 * * * *')])
         ])
 
         def TAG = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date())
