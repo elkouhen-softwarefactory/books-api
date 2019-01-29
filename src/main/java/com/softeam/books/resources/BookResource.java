@@ -23,7 +23,7 @@ public class BookResource {
     }
 
     @GetMapping(path = "/books")
-    Collection<BookDTO> books() {
+    public Collection<BookDTO> books() {
 
         logger.info("Book Ressource called !");
         return bookDAO.findAll();
