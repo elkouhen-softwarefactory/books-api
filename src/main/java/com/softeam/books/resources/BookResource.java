@@ -5,10 +5,13 @@ import com.softeam.books.dto.BookDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Collection;
+
 
 @RestController
 public class BookResource {
@@ -21,11 +24,13 @@ public class BookResource {
     public BookResource(BookDAO bookDAO) {
         this.bookDAO = bookDAO;
     }
-
+    
     @GetMapping(path = "/books")
     public Collection<BookDTO> books() {
 
-        logger.info("Book Ressource called !");
+        SecurityContext context = SecurityContextHolder.getContext();
+
+        logger.info("Book Ressource called ! " + context);
         return bookDAO.findAll();
     }
 }

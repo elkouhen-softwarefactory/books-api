@@ -1,0 +1,26 @@
+logging:
+  level:
+    org:
+      springframework:
+        security: DEBUG
+
+
+security:
+  oauth2:
+
+    resource:
+      userInfoUri: https://keycloak.k8.wildwidewest.xyz/auth/realms/opus/protocol/openid-connect/userinfo
+      token-info-uri: https://keycloak.k8.wildwidewest.xyz/auth/realms/opus/protocol/openid-connect/token/introspect
+      prefer-token-info: false
+
+    client:
+      clientId: books-api
+      accessTokenUri: https://keycloak.k8.wildwidewest.xyz/auth/realms/opus/protocol/openid-connect/token
+      userAuthorizationUri: https://keycloak.k8.wildwidewest.xyz/auth/realms/opus/protocol/openid-connect/auth
+      scope: openid
+      client-secret: "09c5f3c4-2e0b-4e69-b7ef-2a9a75708e20"
+      grant-type: authorization_code
+
+spring.thymeleaf.template-loader-path: classpath:/templates
+spring.thymeleaf.suffix: .html
+spring.thymeleaf.cache: false
