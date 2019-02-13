@@ -1,4 +1,4 @@
-package com.softeam.books.conf;
+package com.softeam.books.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
