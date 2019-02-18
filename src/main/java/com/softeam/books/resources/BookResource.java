@@ -24,13 +24,14 @@ public class BookResource {
     public BookResource(BookDAO bookDAO) {
         this.bookDAO = bookDAO;
     }
-    
+
     @GetMapping(path = "/books")
     public Collection<BookDTO> books() {
 
         SecurityContext context = SecurityContextHolder.getContext();
 
-        logger.info("Book Ressource called ! " + context);
+        logger.info("@GetMapping(path = \"/books\") called !");
+
         return bookDAO.findAll();
     }
 }
