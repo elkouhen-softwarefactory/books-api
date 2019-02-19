@@ -55,7 +55,10 @@ podTemplate(label: 'books-api-pod', nodeSelector: 'medium', containers: [
 
         stage('RUN') {
 
-            build job: "/SofteamOuest-Opus/chart-run/master",
+            when {
+                branch 'develop'
+            }
+            build job: "/SofteamOuest-Opus/chart-run/$BRANCH_NAME",
                     wait: false,
                     parameters: [string(name: 'image', value: "$TAG"),
                                  string(name: 'chart', value: "books-api")]
