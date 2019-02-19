@@ -27,7 +27,7 @@ podTemplate(label: 'books-api-pod', nodeSelector: 'medium', containers: [
                 pipelineTriggers([pollSCM('*/1 * * * *')])
         ])
 
-        def TAG = "t" + new SimpleDateFormat("yyyyMMddHHmmss").format(new Date())
+        def TAG = "t$BUILD_NUMBER"
 
         def URL = "registry.k8.wildwidewest.xyz"
 
