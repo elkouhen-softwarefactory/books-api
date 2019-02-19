@@ -21,8 +21,7 @@ podTemplate(label: 'books-api-pod', nodeSelector: 'medium', containers: [
                                 artifactNumToKeepStr: '1',
                                 daysToKeepStr: '3',
                                 numToKeepStr: '3'
-                        )),
-                pipelineTriggers([pollSCM('*/1 * * * *')])
+                        ))
         ])
 
         def TAG = "t$BUILD_NUMBER"
