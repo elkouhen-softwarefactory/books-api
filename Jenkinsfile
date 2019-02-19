@@ -1,6 +1,4 @@
 #!groovy
-import java.text.*
-
 // pod utilisé pour la compilation du projet
 podTemplate(label: 'books-api-pod', nodeSelector: 'medium', containers: [
 
@@ -55,14 +53,12 @@ podTemplate(label: 'books-api-pod', nodeSelector: 'medium', containers: [
 
         stage('RUN') {
 
-            when {
-                branch 'develop'
+            if (BRANCH_NAME == 'develop') {
+                build job: "/SofteamOuest-Opus/chart-run/$BRANCH_NAME",
+                        wait: false,
+                        parameters: [string(name: 'image', value: "$TAG"),
+                                     string(name: 'chart', value: "books-api")]
             }
-            build job: "/SofteamOuest-Opus/chart-run/$BRANCH_NAME",
-                    wait: false,
-                    parameters: [string(name: 'image', value: "$TAG"),
-                                 string(name: 'chart', value: "books-api")]
         }
-
     }
 }
