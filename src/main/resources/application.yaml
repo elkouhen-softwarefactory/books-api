@@ -5,6 +5,11 @@ logging:
         security: DEBUG
 
 
+server:
+  use-forward-headers: true
+  servlet:
+    context-path: /api
+    
 security:
   oauth2:
 
