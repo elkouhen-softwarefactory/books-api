@@ -18,5 +18,5 @@ security:
       access-token-uri: https://keycloak.k8.wildwidewest.xyz/auth/realms/opus/protocol/openid-connect/token
       user-authorization-uri: https://keycloak.k8.wildwidewest.xyz/auth/realms/opus/protocol/openid-connect/auth
       scope: openid
-      client-secret: "09c5f3c4-2e0b-4e69-b7ef-2a9a75708e20"
+      client-secret: "1b56dd14-fc57-4fd5-903a-bc59aabcab4c"
       grant-type: authorization_code
