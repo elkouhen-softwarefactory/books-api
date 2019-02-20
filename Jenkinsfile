@@ -24,7 +24,7 @@ podTemplate(label: 'books-api-pod', nodeSelector: 'medium', containers: [
                         ))
         ])
 
-        def TAG = "t$BUILD_NUMBER"
+        def TAG = "$BRANCH_NAME-$BUILD_NUMBER"
 
         def URL = "registry.k8.wildwidewest.xyz"
 
