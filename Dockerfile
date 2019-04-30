@@ -12,7 +12,7 @@ RUN mvn dependency:go-offline
 
 COPY src/ src/
 
-RUN mvn package
+RUN mvn clean package
 
 EXPOSE 8080
 
