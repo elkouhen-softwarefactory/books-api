@@ -1,4 +1,4 @@
-package com.softeam.books.dto;
+package com.ippon.books.dto;
 
 public class BookDTO {
 

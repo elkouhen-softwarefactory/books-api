@@ -1,4 +1,4 @@
-package com.softeam.books.config;
+package com.ippon.books.config;
 
 import org.flywaydb.core.Flyway;
 import org.springframework.beans.factory.annotation.Autowired;

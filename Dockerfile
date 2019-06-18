@@ -2,7 +2,7 @@ FROM maven:3.6.0-jdk-8
 
 ARG SONAR_TOKEN
 
-MAINTAINER mehdi.elkouhen@softeam.fr
+MAINTAINER melkouhen@ippon.fr
 
 WORKDIR /apps/books
 

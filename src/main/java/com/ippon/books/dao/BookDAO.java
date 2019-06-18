@@ -1,6 +1,6 @@
-package com.softeam.books.dao;
+package com.ippon.books.dao;
 
-import com.softeam.books.dto.BookDTO;
+import com.ippon.books.dto.BookDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;

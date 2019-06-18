@@ -1,7 +1,7 @@
-package com.softeam.books.resources;
+package com.ippon.books.resources;
 
-import com.softeam.books.dao.BookDAO;
-import com.softeam.books.dto.BookDTO;
+import com.ippon.books.dao.BookDAO;
+import com.ippon.books.dto.BookDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
