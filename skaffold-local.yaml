@@ -1,9 +1,8 @@
-apiVersion: skaffold/v1beta1
+apiVersion: skaffold/v1beta11
 kind: Config
 build:
   artifacts:
   - image: registry/opus-books-api
-    jibMaven: {}
 deploy:
   helm:
     releases:

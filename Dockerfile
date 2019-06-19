@@ -1,4 +1,4 @@
-FROM maven:3.6.0-jdk-8
+FROM maven:3.6.1-jdk-12
 
 ARG SONAR_TOKEN
 
@@ -16,4 +16,6 @@ RUN mvn clean package
 
 EXPOSE 8080
 
-CMD java -jar /apps/books/target/books-api.jar
+EXPOSE 5005
+
+CMD java -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005 -jar /apps/books/target/books-api.jar

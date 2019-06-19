@@ -37,11 +37,6 @@
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
-<!--        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-security</artifactId>
-        </dependency>-->
-
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
@@ -125,14 +120,10 @@
                 <version>1.2.0</version>
                 <configuration>
                     <allowInsecureRegistries>true</allowInsecureRegistries>
-                    <!--to>
-                        <image>registry.k8.wildwidewest.xyz/repository/docker-repository/opus/books-api</image>
-                    </to-->
                     <container>
                         <jvmFlags>
+
                             <jvmFlag>-Djava.security.egd=file:/dev/./urandom</jvmFlag>
-                            <jvmFlag>-XX:+UnlockExperimentalVMOptions</jvmFlag>
-                            <jvmFlag>-XX:+UseCGroupMemoryLimitForHeap</jvmFlag>
                         </jvmFlags>
                     </container>
                 </configuration>
