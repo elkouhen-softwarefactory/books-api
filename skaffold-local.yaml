@@ -3,6 +3,7 @@ kind: Config
 build:
   artifacts:
   - image: registry/opus-books-api
+    jibMaven: {}
 deploy:
   helm:
     releases:
