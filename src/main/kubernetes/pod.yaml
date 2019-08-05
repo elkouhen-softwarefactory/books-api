@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    run: books-api
+  name: books-api
+spec:
+  containers:
+  - image: elkouhen/books-api
+    imagePullPolicy: IfNotPresent
+    name: books-api

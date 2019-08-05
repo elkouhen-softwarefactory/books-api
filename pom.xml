@@ -116,22 +116,22 @@
             <plugin>
                 <groupId>com.google.cloud.tools</groupId>
                 <artifactId>jib-maven-plugin</artifactId>
-                <version>1.2.0</version>
+                <version>1.4.0</version>
                 <configuration>
                     <allowInsecureRegistries>true</allowInsecureRegistries>
-                    <from>
+                    <!--from>
                         <image>openjdk:12.0-oracle</image>
                         <auth>
                             <username>elkouhen</username>
                             <password>aji8hna!</password>
                         </auth>
-                    </from>
+                    </from-->
                     <container>
                         <jvmFlags>
-                            <jvmFlag>-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005</jvmFlag>
+                            <!--jvmFlag>-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005</jvmFlag-->
                          <jvmFlag>-Djava.security.egd=file:/dev/./urandom</jvmFlag>
                         </jvmFlags>
-                        <ports><port>8080</port><port>5005</port></ports>
+                        <!--ports><port>8080</port><port>5005</port></ports-->
                     </container>
                 </configuration>
             </plugin>
