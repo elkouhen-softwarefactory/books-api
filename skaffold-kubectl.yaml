@@ -11,8 +11,3 @@ deploy:
   kubectl:
     manifests:
     - src/main/kubernetes/*
-portForward:
-- resourceType: Pod
-  resourceName: books-api
-  port: 5005 # 
-  localPort: 5005 # *Optional*

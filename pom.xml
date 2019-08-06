@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" 
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>fr.opus</groupId>
@@ -111,6 +112,7 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
                     <finalName>books-api</finalName>
+                    <mainClass>com.ippon.books.BookApplication</mainClass>
                 </configuration>
             </plugin>
             <plugin>
@@ -119,19 +121,22 @@
                 <version>1.4.0</version>
                 <configuration>
                     <allowInsecureRegistries>true</allowInsecureRegistries>
-                    <!--from>
+                    <from>
                         <image>openjdk:12.0-oracle</image>
                         <auth>
                             <username>elkouhen</username>
                             <password>aji8hna!</password>
                         </auth>
-                    </from-->
+                    </from>
                     <container>
                         <jvmFlags>
                             <!--jvmFlag>-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005</jvmFlag-->
-                         <jvmFlag>-Djava.security.egd=file:/dev/./urandom</jvmFlag>
+                            <jvmFlag>-Djava.security.egd=file:/dev/./urandom</jvmFlag>
                         </jvmFlags>
-                        <!--ports><port>8080</port><port>5005</port></ports-->
+                        <ports>
+                            <port>8080</port>
+                            <port>5005</port>
+                        </ports>
                     </container>
                 </configuration>
             </plugin>
