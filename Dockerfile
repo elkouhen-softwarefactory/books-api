@@ -14,4 +14,8 @@ RUN mvn clean package
 
 EXPOSE 8080
 
-CMD java -jar /apps/books/target/books-api.jar
+EXPOSE 5005
+
+ENV JAVA_OPTS -agentlib:jdwp=transport=dt_socket,server=y,address=5005,suspend=n
+
+CMD java $JAVA_OPTS -jar /apps/books/target/books-api.jar

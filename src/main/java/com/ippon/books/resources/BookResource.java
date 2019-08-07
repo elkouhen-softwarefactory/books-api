@@ -28,6 +28,6 @@ public class BookResource {
 
         logger.info("@GetMapping /books called -- API 7 !");
 
-        return bookDAO.findAll();  
+        return bookDAO.findAll();
     }
 }
