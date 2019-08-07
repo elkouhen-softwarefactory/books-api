@@ -1,0 +1,20 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    app: books-api
+  name: books-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: books-api
+  template:
+    metadata:
+      labels:
+        app: books-api
+    spec:
+      containers:
+      - image: elkouhen/books-api
+        imagePullPolicy: IfNotPresent
+        name: books-api
