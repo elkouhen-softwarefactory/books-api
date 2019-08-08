@@ -41,9 +41,9 @@ podTemplate(label: 'books-api-pod', nodeSelector: 'medium', containers: [
                 withCredentials([string(credentialsId: 'registry_url', variable: 'registry_url')]) {
 
                     withDockerRegistry(credentialsId: 'nexus_user', url: "${registry_url}") {
-                        sh "docker build . -f Dockerfile --tag ${URL}/repository/docker-repository/${IMAGE}:$TAG"
+                        sh "docker build . -f Dockerfile --tag ${IMAGE}:$TAG"
 
-                        sh "docker push ${URL}/repository/docker-repository/${IMAGE}:$TAG"
+                        sh "docker push ${IMAGE}:$TAG"
                     }
                 }
             }
