@@ -56,7 +56,7 @@ podTemplate(label: 'books-api-pod', nodeSelector: 'medium', containers: [
         stage('RUN') {
 
             if (BRANCH_NAME == 'develop') {
-                build job: "/elkouhen/app-chart-run/$BRANCH_NAME",
+                build job: "/app-chart-run/$BRANCH_NAME",
                         wait: false,
                         parameters: [string(name: 'image', value: "$TAG"),
                                      string(name: 'chart', value: "books-api")]
