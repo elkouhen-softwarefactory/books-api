@@ -41,14 +41,14 @@ podTemplate(label: 'books-api-pod', nodeSelector: 'medium', containers: [
                 withCredentials([string(credentialsId: 'registry_url', variable: 'registry_url'),
                                  usernamePassword(credentialsId: 'nexus_user', passwordVariable: 'pass', usernameVariable : 'user' )]) {
 
-                    // withDockerRegistry(credentialsId: 'nexus_user', url: "${registry_url}") {
+                     withDockerRegistry(credentialsId: 'nexus_user', url: "${registry_url}") {
 
-                        sh "docker login -u ${user} -p ${pass} "
+                        //sh "docker login -u ${user} -p ${pass} "
 
-                        sh "docker build . -f Dockerfile --tag ${IMAGE}:$TAG"
+                        sh "docker build . -f Dockerfile --tag ${URL}/repository/docker-repository/${IMAGE}:$TAG"
 
-                        sh "docker push ${IMAGE}:$TAG"
-                    //}
+                        sh "docker push ${URL}/repository/docker-repository/${IMAGE}:$TAG"
+                    }
                 }
             }
         }
