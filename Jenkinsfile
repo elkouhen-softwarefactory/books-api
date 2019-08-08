@@ -38,7 +38,7 @@ podTemplate(label: 'books-api-pod', nodeSelector: 'medium', containers: [
 
             stage('BUILD') {
 
-                withCredentials([string(credentialsId: 'registry_url', variable: 'registry_url')
+                withCredentials([string(credentialsId: 'registry_url', variable: 'registry_url'),
                                  usernamePassword(credentialsId: 'nexus_user', passwordVariable: 'pass', usernameVariable : 'user' )]) {
 
                     // withDockerRegistry(credentialsId: 'nexus_user', url: "${registry_url}") {
