@@ -26,7 +26,7 @@ podTemplate(label: 'books-api-pod', nodeSelector: 'medium', containers: [
 
         def TAG = "$BRANCH_NAME-$BUILD_NUMBER"
 
-        def URL = "registry.melkouhen.net"
+        def URL = "registry-nexus.melkouhen.net"
 
         def IMAGE = "elkouhen/books-api"
 
