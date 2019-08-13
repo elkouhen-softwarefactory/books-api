@@ -4,20 +4,16 @@ build:
   artifacts:
   - image: elkouhen/books-api
     jibMaven: {}
-  tagPolicy:
-    envTemplate:
-      template: "{{.IMAGE_NAME}}:{{.BRANCH}}"
 deploy:
   helm:
     releases:
     - name: books-api-dev
       chartPath: ../app-charts/books-api
-      setValueTemplates:
-        image.tag: "{{.DIGEST}}"
       overrides:
         auth:
           enabled: false
         h2:
-          enabled: true
+          enabled: false
         ingress:
           enabled: false
+        service.type: LoadBalancer

@@ -26,7 +26,7 @@ public class BookResource {
     @GetMapping(path = "/books")
     public Collection<BookDTO> books() {
 
-        logger.info("@GetMapping /books called -- API 7 !");
+        logger.info("@GetMapping /books called !");
 
         return bookDAO.findAll();
     }
