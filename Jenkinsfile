@@ -38,12 +38,9 @@ podTemplate(label: 'books-api-pod', nodeSelector: 'medium', containers: [
 
             stage('BUILD') {
 
-                withCredentials([string(credentialsId: 'registry_url', variable: 'registry_url'),
-                                 usernamePassword(credentialsId: 'nexus_user', passwordVariable: 'pass', usernameVariable : 'user' )]) {
+                withCredentials([string(credentialsId: 'registry_url', variable: 'registry_url')]) {
 
                      withDockerRegistry(credentialsId: 'nexus_user', url: "${registry_url}") {
-
-                        //sh "docker login -u ${user} -p ${pass} "
 
                         sh "docker build . -f Dockerfile --tag ${URL}/repository/docker-repository/${IMAGE}:$TAG"
 
@@ -56,7 +53,7 @@ podTemplate(label: 'books-api-pod', nodeSelector: 'medium', containers: [
         stage('RUN') {
 
             if (BRANCH_NAME == 'develop') {
-                build job: "/app-chart-run/$BRANCH_NAME",
+                build job: "/elkouhen-softwarefactory/$BRANCH_NAME",
                         wait: false,
                         parameters: [string(name: 'image', value: "$TAG"),
                                      string(name: 'chart', value: "books-api")]
