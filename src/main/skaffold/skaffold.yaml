@@ -1,0 +1,23 @@
+apiVersion: skaffold/v1beta13
+kind: Config
+build:
+  artifacts:
+  - image: elkouhen/books-api
+    jibMaven: {}
+  tagPolicy:
+    envTemplate:
+      template: "{{.IMAGE_NAME}}:{{.BRANCH}}"
+deploy:
+  helm:
+    releases:
+    - name: books-api-dev
+      chartPath: ../app-charts/books-api
+      setValueTemplates:
+        image.tag: "{{.DIGEST}}"
+      overrides:
+        auth:
+          enabled: false
+        h2:
+          enabled: true
+        ingress:
+          enabled: false
